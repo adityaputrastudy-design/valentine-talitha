@@ -9,7 +9,7 @@ if 'msg_val' not in st.session_state: st.session_state.msg_val = ""
 if 'show_pic' not in st.session_state: st.session_state.show_pic = False
 if 'reject_count' not in st.session_state: st.session_state.reject_count = 0
 
-# CSS PERFECT - 2 OPSI SAJA
+# CSS PERFECT
 st.markdown(f"""
 <style>
 .stApp {{ 
@@ -17,7 +17,7 @@ st.markdown(f"""
     min-height: 100vh;
     padding-bottom: 120px;
 }}
-.mau-btn {{
+.mau-display {{
     font-size: {st.session_state.size_val}px !important;
     height: {max(80, st.session_state.size_val * 3.2)}px !important;
     width: {min(98, 40 + st.session_state.reject_count * 12)}vw !important;
@@ -27,28 +27,22 @@ st.markdown(f"""
     border: none !important;
     border-radius: 25px !important;
     box-shadow: 0 15px 35px rgba(255,77,109,0.5) !important;
-    cursor: pointer !important;
-    transition: all 0.5s ease !important;
-    display: block !important;
     margin: 20px auto !important;
     padding: {max(15, st.session_state.size_val * 0.6)}px {max(25, st.session_state.size_val)}px !important;
     box-sizing: border-box !important;
     line-height: 1.1 !important;
     overflow: hidden !important;
     text-align: center !important;
-    position: relative !important;
-    z-index: 999 !important;
+    display: block !important;
+    pointer-events: none !important;
 }}
-.mau-btn:hover {{
-    transform: scale(1.05) !important;
-    box-shadow: 0 25px 50px rgba(255,77,109,0.7) !important;
-}}
-.mau-btn span {{
-    font-size: {st.session_state.size_val}px !important;
-    font-weight: bold !important;
-    line-height: 1.1 !important;
-    white-space: nowrap !important;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.3) !important;
+.mau-trigger {{
+    height: {max(80, st.session_state.size_val * 3.2)}px !important;
+    width: {min(98, 40 + st.session_state.reject_count * 12)}vw !important;
+    opacity: 0 !important;
+    position: absolute !important;
+    z-index: 1000 !important;
+    margin: 20px auto !important;
 }}
 .gamau-btn {{
     background: linear-gradient(45deg, #3d3d3d, #555) !important;
@@ -78,16 +72,15 @@ st.markdown(f"""
     max-width: 600px; margin: 20px auto; border-radius: 25px; overflow: hidden;
     box-shadow: 0 25px 60px rgba(0,0,0,0.6);
 }}
+.mau-container {{
+    position: relative !important;
+    margin: 20px auto !important;
+    display: block !important;
+}}
 </style>
 """, unsafe_allow_html=True)
 
 st.title("💕 Hai dek Tata sayang ku! 💕")
-
-# Handle MAU click via query param
-if st.query_params.get("show_pic") == ["true"]:
-    st.session_state.show_pic = True
-    st.query_params.clear()
-    st.rerun()
 
 if st.session_state.show_pic:
     st.balloons()
@@ -106,14 +99,21 @@ if st.session_state.show_pic:
 else:
     st.markdown("### Kamu mau gak rayain Valentine sama aku? 😍🌹🍫")
     
-    # ✅ TOMBOL MAU - HTML CLICKABLE (2 OPSI SAJA!)
+    # ✅ CONTAINER MAU BUTTON (Visual + Functional)
     st.markdown(f"""
-    <button class="mau-btn" onclick="window.location.href='?show_pic=true'">
-        <span>MAU DONG! 😍💖 ({st.session_state.size_val}px)</span>
-    </button>
+    <div class="mau-container">
+        <button class="mau-display">
+            <span>MAU DONG! 😍💖 ({st.session_state.size_val}px)</span>
+        </button>
+    </div>
     """, unsafe_allow_html=True)
     
-    # ✅ TOMBOL GAMAU - MEMBESARKAN MAU
+    # MAU TRIGGER - Invisible tapi cover full area tombol
+    if st.button(" ", key="mau_trigger", help="Klik tombol pink!"):
+        st.session_state.show_pic = True
+        st.rerun()
+    
+    # GAMAU - Membesarkan MAU
     if st.button("**Gamau malas ahh** 😤", key="gak_btn"):
         st.session_state.reject_count += 1
         st.session_state.size_val += 20
@@ -127,7 +127,7 @@ else:
         st.session_state.msg_val = random.choice(messages)
         st.rerun()
     
-    # ✅ TOMBOL RESET - DI BAWAH
+    # RESET
     if st.button("🔄 Reset", key="reset_btn"):
         st.session_state.size_val = 24
         st.session_state.reject_count = 0
