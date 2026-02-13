@@ -3,12 +3,13 @@ import random
 
 st.set_page_config(page_title="Special for Talitha", page_icon="💌")
 
-# Inisialisasi ukuran tombol di session state
+# 1. Inisialisasi ukuran tombol di session state
 if 'font_size' not in st.session_state:
     st.session_state.font_size = 18
 if 'button_padding' not in st.session_state:
     st.session_state.button_padding = 10
 
+# 2. CSS dinamis yang mengambil nilai dari session state
 st.markdown(f"""
     <style>
     .stApp {{ background-color: #0e1117; }}
@@ -23,6 +24,7 @@ st.markdown(f"""
         border-radius: 20px;
         width: 100%;
         font-weight: bold;
+        transition: 0.3s;
     }}
     
     /* Tombol Gak Mau tetap kecil */
@@ -38,7 +40,7 @@ st.markdown(f"""
 st.title("Hai Talitha! ❤️")
 st.markdown("### Kamu mau jadi Valentine aku gak? 🌹🍫")
 
-# Link Direct dari Google Drive lo (Pastikan ID ini benar)
+# Link Direct dari Google Drive lo
 gif_url = "https://drive.google.com/uc?export=view&id=1yuyexrWlEGZP6edBVxIhFrq5GqAyjWVd"
 
 col1, col2 = st.columns(2)
@@ -55,9 +57,9 @@ with col1:
 with col2:
     st.markdown('<div class="gak-btn">', unsafe_allow_html=True)
     if st.button("Gak Mau 😜"):
-        # Tambah ukuran tombol MAU setiap kali Gak Mau diklik
-        st.session_state.font_size += 10
-        st.session_state.button_padding += 5
+        # 3. Logika penambahan ukuran secara drastis
+        st.session_state.font_size += 15 
+        st.session_state.button_padding += 8
         
         messages = [
             "Ayo dong, jangan gitu! 🥺",
@@ -68,17 +70,15 @@ with col2:
             "Aku udah begadang loh buat bikin ini... ☕",
             "Jari kamu pasti kepeleset ya? Coba klik yang kiri ⬅️",
             "Yah, tombol ini lagi rusak, coba klik yang 'MAU!' 🛠️",
-            "Error 404: Jawaban 'Gak Mau' tidak ditemukan 🚫",
             "Duh, hatiku retak dikit nih pas kamu klik ini... 🔨",
-            "Pikirkan lagi, masa cowok sekeren aku ditolak? 😎",
-            "Nanti aku nangis di pojokan loh... 😭",
-            "Kamu cuma ngetes kesabaran aku kan? 😇",
-            "Gak mau tau, pokoknya harus klik yang 'MAU!' 😤",
+            "Pokoknya harus klik yang 'MAU!' 😤",
             "Plis... satu kali ini aja klik yang kiri 🙏",
-            "Kalo kamu klik ini lagi, nanti aku kirim spam balon! 🎈",
             "Ciee yang ragu-ragu... klik 'MAU!' aja udah! 🌹"
         ]
         st.error(random.choice(messages))
+        
+        # 4. Paksa Streamlit untuk menggambar ulang halaman
+        st.rerun() 
     st.markdown('</div>', unsafe_allow_html=True)
 
 st.markdown("<p style='text-align: center; font-size: 0.8em; color: #555;'>Dibuat oleh Aditya <3 </p>", unsafe_allow_html=True)
