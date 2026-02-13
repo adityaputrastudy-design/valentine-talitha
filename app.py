@@ -1,6 +1,5 @@
 import streamlit as st
 import random
-import time
 
 st.set_page_config(page_title="Special for Tata", page_icon="💌", layout="centered")
 
@@ -10,7 +9,7 @@ if 'msg_val' not in st.session_state: st.session_state.msg_val = ""
 if 'show_pic' not in st.session_state: st.session_state.show_pic = False
 if 'reject_count' not in st.session_state: st.session_state.reject_count = 0
 
-# CSS + JS HACK MUTLAK
+# CSS PERFECT - Text fit inside button
 st.markdown(f"""
 <style>
 .stApp {{ 
@@ -19,7 +18,7 @@ st.markdown(f"""
 }}
 .mau-btn {{
     font-size: {st.session_state.size_val}px !important;
-    height: {max(60, st.session_state.size_val * 2.5)}px !important;
+    height: {max(80, st.session_state.size_val * 3.2)}px !important;
     width: {min(95, 40 + st.session_state.reject_count * 8)}vw !important;
     background: linear-gradient(45deg, #ff4d6d, #ff6b9d) !important;
     color: white !important;
@@ -31,10 +30,23 @@ st.markdown(f"""
     transition: all 0.5s ease !important;
     display: block !important;
     margin: 20px auto !important;
+    padding: {max(15, st.session_state.size_val * 0.6)}px {max(25, st.session_state.size_val)}px !important;
+    box-sizing: border-box !important;
+    line-height: 1.1 !important;
+    overflow: hidden !important;
+    text-align: center !important;
+    position: relative !important;
 }}
 .mau-btn:hover {{
     transform: scale(1.05) !important;
     box-shadow: 0 25px 50px rgba(255,77,109,0.7) !important;
+}}
+.mau-btn span {{
+    font-size: {st.session_state.size_val}px !important;
+    font-weight: bold !important;
+    line-height: 1.1 !important;
+    white-space: nowrap !important;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3) !important;
 }}
 .gamau-btn {{
     background: #3d3d3d !important;
@@ -51,17 +63,6 @@ st.markdown(f"""
     box-shadow: 0 25px 60px rgba(0,0,0,0.6);
 }}
 </style>
-
-<script>
-parent = window.parent.document || window.document;
-setTimeout(() => {{
-    const btn = parent.querySelector('.mau-btn');
-    if(btn) btn.onclick = () => {{
-        parent.location.reload();
-        window.parent.postMessage({{show_pic: true}}, "*");
-    }};
-}}, 100);
-</script>
 """, unsafe_allow_html=True)
 
 st.title("💕 Hai dek Tata sayang ku! 💕")
@@ -70,7 +71,6 @@ if st.session_state.show_pic:
     st.balloons()
     st.markdown("## 🎉 Yeay! Happy Valentine's Day Tata sayang! 🍫🌹✨")
     
-    # GIF Container
     st.markdown("""
     <div class="gif-container">
         <img src="https://drive.google.com/uc?export=view&id=1yuyexrWlEGZP6edBVxIhFrq5GqAyjWVd" 
@@ -89,19 +89,17 @@ if st.session_state.show_pic:
 else:
     st.markdown("### Kamu mau gak rayain Valentine sama aku? 😍🌹🍫")
     
-    # ✅ HTML CUSTOM BUTTON - 100% KONTROL UKURAN!
+    # ✅ BUTTON PERFECT - TEXT SELALU FIT!
     st.markdown(f"""
-    <button class="mau-btn" id="mau-custom">
-        <span style="font-size: inherit; display: block; padding: 10px;">
-            **MAU DONG!** 😍💖
-        </span>
+    <button class="mau-btn" onclick="parent.location.reload(); window.parent.postMessage({{type:'show_pic'}}, '*');">
+        <span>MAU DONG! 😍💖</span>
     </button>
     """, unsafe_allow_html=True)
     
-    # Gamau button
+    # Gamau Streamlit button
     if st.button("**Gamau malas ahh** 🤬😠", key="gak_btn"):
         st.session_state.reject_count += 1
-        st.session_state.size_val += 15  # BESAR CEPET!
+        st.session_state.size_val += 15
         messages = [
             f"😱 ({st.session_state.reject_count}x) Tombol MAU RAKSASA!",
             "💔 Iyain dong sayangg ❤️",
