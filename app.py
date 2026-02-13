@@ -9,12 +9,13 @@ if 'msg_val' not in st.session_state: st.session_state.msg_val = ""
 if 'show_pic' not in st.session_state: st.session_state.show_pic = False
 if 'reject_count' not in st.session_state: st.session_state.reject_count = 0
 
-# CSS PERFECT - Dynamic size + Reset button
+# CSS PERFECT
 st.markdown(f"""
 <style>
 .stApp {{ 
     background: linear-gradient(135deg, #0e1117 0%, #1a1f2e 50%, #16213e 100%);
     min-height: 100vh;
+    padding-bottom: 100px;
 }}
 .mau-btn {{
     font-size: {st.session_state.size_val}px !important;
@@ -52,35 +53,26 @@ st.markdown(f"""
 .gamau-btn {{
     background: linear-gradient(45deg, #3d3d3d, #555) !important;
     color: white !important;
-    font-size: 16px !important;
-    width: 240px !important;
-    height: 55px !important;
+    font-size: 18px !important;
+    width: 260px !important;
+    height: 60px !important;
     border-radius: 20px !important;
     border: none !important;
-    margin: 20px auto !important;
+    margin: 25px auto !important;
     font-weight: 600 !important;
-    display: block !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important;
 }}
 .reset-btn {{
     background: linear-gradient(45deg, #4f46e5, #7c3aed) !important;
     color: white !important;
-    font-size: 14px !important;
-    width: 180px !important;
-    height: 45px !important;
+    font-size: 16px !important;
+    width: 200px !important;
+    height: 55px !important;
     border-radius: 25px !important;
     border: none !important;
     margin: 30px auto !important;
     font-weight: 600 !important;
-    box-shadow: 0 10px 30px rgba(79, 70, 229, 0.4) !important;
-    position: fixed !important;
-    bottom: 30px !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    z-index: 1000 !important;
-}}
-.reset-btn:hover {{
-    transform: translateX(-50%) translateY(-2px) !important;
-    box-shadow: 0 15px 40px rgba(79, 70, 229, 0.6) !important;
+    box-shadow: 0 10px 30px rgba(79,70,229,0.4) !important;
 }}
 .gif-container {{
     max-width: 600px; margin: 20px auto; border-radius: 25px; overflow: hidden;
@@ -91,10 +83,9 @@ st.markdown(f"""
 
 st.title("💕 Hai dek Tata sayang ku! 💕")
 
-# Handle MAU click via query param
-if st.query_params.get("show_pic") == ["true"]:
+# Handle query params
+if st.query_params.get("show_pic"):
     st.session_state.show_pic = True
-    st.query_params.clear()
     st.rerun()
 
 if st.session_state.show_pic:
@@ -114,41 +105,47 @@ if st.session_state.show_pic:
 else:
     st.markdown("### Kamu mau gak rayain Valentine sama aku? 😍🌹🍫")
     
-    # ✅ TOMBOL MAU - SELALU CLICKABLE & MEMBESAR
+    # MAU BUTTON VISUAL ( gede + menarik )
     st.markdown(f"""
-    <button class="mau-btn" onclick="window.location.href='?show_pic=true'">
-        <span>MAU DONG! 😍💖 ({st.session_state.size_val}px)</span>
-    </button>
+    <div style="pointer-events: none;">
+        <button class="mau-btn">
+            <span>MAU DONG! 😍💖 ({st.session_state.size_val}px)</span>
+        </button>
+    </div>
     """, unsafe_allow_html=True)
     
-    # ✅ TOMBOL GAMAU - SELALU TERSEDIA
+    # MAU BUTTON FUNCTIONAL (hidden tapi clickable)
+    if st.button(" ", key="mau_click", help="Klik area pink di atas!"):
+        st.session_state.show_pic = True
+        st.rerun()
+    
+    # GAMAU BUTTON - SELALU AKTIF
     if st.button("**Gamau malas ahh** 😤", key="gak_btn"):
         st.session_state.reject_count += 1
-        st.session_state.size_val += 20  # Membesar agresif setiap klik
+        st.session_state.size_val += 20
         messages = [
-            f"😱 ({st.session_state.reject_count}x reject!) Tombol MAU makin RAKSASA!",
+            f"😱 ({st.session_state.reject_count}x) Tombol MAU RAKSASA!",
             "💔 Iyain dong sayangg ❤️",
-            f"📏 Size {st.session_state.size_val}px - hampir nutup layar!",
-            f"✨ Tombol MAU udah {st.session_state.reject_count}x lebih besar!",
-            f"🚨 Reject #{st.session_state.reject_count} - GEDE BANGET!"
+            f"Size {st.session_state.size_val}px - nutup layar nih!",
+            "✨ Klik tombol pink gede di atas!",
+            f"Reject #{st.session_state.reject_count} - GEDE BANGET!"
         ]
         st.session_state.msg_val = random.choice(messages)
         st.rerun()
+    
+    # RESET BUTTON - SELALU DI BAWAH
+    if st.button("🔄 Reset", key="reset_btn"):
+        st.session_state.size_val = 24
+        st.session_state.reject_count = 0
+        st.session_state.msg_val = ""
+        st.rerun()
 
-# Error message
 if st.session_state.msg_val:
     st.error("💥 " + st.session_state.msg_val)
 
-# ✅ TOMBOL RESET - SELALU DI BAWAH (Fixed position)
-st.markdown("""
-<button class="reset-btn" onclick="window.location.href=window.location.pathname">
-    🔄 Reset
-</button>
-""", unsafe_allow_html=True)
-
 # Footer
 st.markdown("""
-<div style='text-align: center; padding: 80px 40px 40px 40px; color: #aaa;'>
+<div style='text-align: center; padding: 40px; color: #aaa;'>
     <p style='font-size: 1.2em; margin: 0; color: #ff6b9d;'>Made with ❤️ by Aditya</p>
     <p style='font-size: 0.95em;'>Happy Valentine's Day 2026! 💕</p>
 </div>
