@@ -8,8 +8,9 @@ if 'size_val' not in st.session_state: st.session_state.size_val = 24
 if 'msg_val' not in st.session_state: st.session_state.msg_val = ""
 if 'show_pic' not in st.session_state: st.session_state.show_pic = False
 if 'reject_count' not in st.session_state: st.session_state.reject_count = 0
+if 'game_active' not in st.session_state: st.session_state.game_active = True
 
-# CSS PERFECT - Text fit inside button
+# CSS PERFECT - Text fit + Reset button
 st.markdown(f"""
 <style>
 .stApp {{ 
@@ -26,7 +27,7 @@ st.markdown(f"""
     border: none !important;
     border-radius: 25px !important;
     box-shadow: 0 15px 35px rgba(255,77,109,0.5) !important;
-    cursor: pointer !important;
+    cursor: { 'pointer' if st.session_state.game_active else 'not-allowed' } !important;
     transition: all 0.5s ease !important;
     display: block !important;
     margin: 20px auto !important;
@@ -36,6 +37,7 @@ st.markdown(f"""
     overflow: hidden !important;
     text-align: center !important;
     position: relative !important;
+    opacity: {1.0 if st.session_state.game_active else 0.6} !important;
 }}
 .mau-btn:hover {{
     transform: scale(1.05) !important;
@@ -48,15 +50,36 @@ st.markdown(f"""
     white-space: nowrap !important;
     text-shadow: 0 2px 4px rgba(0,0,0,0.3) !important;
 }}
+.mau-btn:disabled {{
+    cursor: not-allowed !important;
+    opacity: 0.5 !important;
+}}
 .gamau-btn {{
-    background: #3d3d3d !important;
+    background: linear-gradient(45deg, #3d3d3d, #555) !important;
     color: white !important;
     font-size: 16px !important;
-    width: 220px !important;
-    height: 50px !important;
-    border-radius: 15px !important;
+    width: 240px !important;
+    height: 55px !important;
+    border-radius: 20px !important;
     border: none !important;
-    margin: 15px auto !important;
+    margin: 20px auto !important;
+    font-weight: 600 !important;
+}}
+.reset-btn {{
+    background: linear-gradient(45deg, #4f46e5, #7c3aed) !important;
+    color: white !important;
+    font-size: 16px !important;
+    width: 200px !important;
+    height: 50px !important;
+    border-radius: 25px !important;
+    border: none !important;
+    margin: 20px auto !important;
+    font-weight: 600 !important;
+    box-shadow: 0 10px 30px rgba(79, 70, 229, 0.4) !important;
+}}
+.reset-btn:hover {{
+    transform: translateY(-2px) !important;
+    box-shadow: 0 15px 40px rgba(79, 70, 229, 0.6) !important;
 }}
 .gif-container {{
     max-width: 600px; margin: 20px auto; border-radius: 25px; overflow: hidden;
@@ -81,41 +104,73 @@ if st.session_state.show_pic:
     st.snow()
     st.success("💖 Aku sayang banget sama kamu Tata ❤️")
     
-    if st.button("🎈 Main Lagi? 🎈", key="reset"):
-        for key in list(st.session_state.keys()):
-            del st.session_state[key]
-        st.rerun()
+    col1, col2 = st.columns([3, 1])
+    with col2:
+        if st.button("🎈 Main Lagi?", key="reset_game"):
+            # Full reset
+            for key in list(st.session_state.keys()):
+                del st.session_state[key]
+            st.rerun()
         
-else:
+elif st.session_state.game_active:
     st.markdown("### Kamu mau gak rayain Valentine sama aku? 😍🌹🍫")
     
-    # ✅ BUTTON PERFECT - TEXT SELALU FIT!
+    # ✅ MAU BUTTON - Aktif di awal!
     st.markdown(f"""
-    <button class="mau-btn" onclick="parent.location.reload(); window.parent.postMessage({{type:'show_pic'}}, '*');">
+    <button class="mau-btn" onclick="window.parent.location.href=window.parent.location.href.split('?')[0] + '?show_pic=true';">
         <span>MAU DONG! 😍💖</span>
     </button>
     """, unsafe_allow_html=True)
     
-    # Gamau Streamlit button
-    if st.button("**Gamau malas ahh** 🤬😠", key="gak_btn"):
-        st.session_state.reject_count += 1
-        st.session_state.size_val += 15
-        messages = [
-            f"😱 ({st.session_state.reject_count}x) Tombol MAU RAKSASA!",
-            "💔 Iyain dong sayangg ❤️",
-            f"Size {st.session_state.size_val}px! Nutup layar nih! 😱",
-            "✨ Klik MAU yuk Tata!",
-            f"Reject #{st.session_state.reject_count} - GEDE BANGET!"
-        ]
-        st.session_state.msg_val = random.choice(messages)
+    # Gamau button
+    col1, col2 = st.columns([1, 1])
+    with col2:
+        if st.button("**Gamau malas ahh** 😤", key="gak_btn", help="Buat tombol MAU membesar!"):
+            st.session_state.reject_count += 1
+            st.session_state.size_val += 18  # Membesar agresif
+            st.session_state.game_active = False  # Disable MAU setelah reject pertama
+            messages = [
+                f"😱 ({st.session_state.reject_count}x) Tombol MAU RAKSASA!",
+                "💔 Iyain dong sayangg ❤️",
+                f"Size {st.session_state.size_val}px! Nutup layar nih! 😱",
+                "✨ Sekarang klik tombol pink gede itu!",
+                f"Reject #{st.session_state.reject_count} - GEDE BANGET!"
+            ]
+            st.session_state.msg_val = random.choice(messages)
+            st.rerun()
+else:
+    # Game disabled - Tombol MAU membesar tapi disabled
+    st.markdown("### Sekarang tombolnya udah gede! 😍 Klik aja!")
+    
+    st.markdown(f"""
+    <button class="mau-btn" onclick="window.parent.location.href=window.parent.location.href.split('?')[0] + '?show_pic=true';" 
+               {'disabled' if not st.session_state.game_active else ''}>
+        <span>MAU DONG! 😍💖</span>
+    </button>
+    """, unsafe_allow_html=True)
+    
+    # RESET BUTTON - Kembalikan ke awal
+    if st.button("🔄 Reset Game", key="reset_partial"):
+        st.session_state.game_active = True
+        st.session_state.reject_count = 0
+        st.session_state.size_val = 24
+        st.session_state.msg_val = ""
         st.rerun()
 
+# Error message
 if st.session_state.msg_val:
     st.error("💥 " + st.session_state.msg_val)
 
+# Footer
 st.markdown("""
 <div style='text-align: center; padding: 40px; color: #aaa;'>
     <p style='font-size: 1.2em; margin: 0; color: #ff6b9d;'>Made with ❤️ by Aditya</p>
     <p style='font-size: 0.95em;'>Happy Valentine's Day 2026! 💕</p>
 </div>
 """, unsafe_allow_html=True)
+
+# Handle query param for MAU click
+if st.query_params.get("show_pic") == ["true"]:
+    st.session_state.show_pic = True
+    st.query_params.clear()
+    st.rerun()
