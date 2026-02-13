@@ -1,71 +1,50 @@
 import streamlit as st
 import random
-import time
 
 st.set_page_config(page_title="Special for Tata", page_icon="💌", layout="centered")
 
-# Session state lengkap
+# 1. State Management
 if 'size_val' not in st.session_state: st.session_state.size_val = 24
 if 'msg_val' not in st.session_state: st.session_state.msg_val = ""
 if 'show_pic' not in st.session_state: st.session_state.show_pic = False
 if 'reject_count' not in st.session_state: st.session_state.reject_count = 0
-if 'mau_click_trigger' not in st.session_state: st.session_state.mau_click_trigger = False
 
-# CSS PERFECT - Dynamic sizing
+# 2. CSS PERFECT - Menghilangkan "Kotak Kosong" dan Mengatur Ukuran Dinamis
 st.markdown(f"""
 <style>
+/* Background & Dasar */
 .stApp {{ 
     background: linear-gradient(135deg, #0e1117 0%, #1a1f2e 50%, #16213e 100%);
-    min-height: 100vh;
 }}
+
+/* Tombol MAU Raksasa: Melebar & Memanjang */
 .mau-btn {{
     font-size: {st.session_state.size_val}px !important;
     height: {max(80, st.session_state.size_val * 3.2)}px !important;
-    width: {min(95, 40 + st.session_state.reject_count * 8)}vw !important;
+    width: {min(95, 40 + st.session_state.reject_count * 10)}vw !important;
     background: linear-gradient(45deg, #ff4d6d, #ff6b9d) !important;
     color: white !important;
     font-weight: bold !important;
-    border: none !important;
     border-radius: 25px !important;
     box-shadow: 0 15px 35px rgba(255,77,109,0.5) !important;
     cursor: pointer !important;
-    transition: all 0.5s ease !important;
+    border: none !important;
     display: block !important;
     margin: 20px auto !important;
-    padding: {max(15, st.session_state.size_val * 0.6)}px {max(25, st.session_state.size_val)}px !important;
-    box-sizing: border-box !important;
     line-height: 1.1 !important;
-    overflow: hidden !important;
     text-align: center !important;
-    position: relative !important;
-    z-index: 999 !important;
+    transition: all 0.3s ease-in-out !important;
 }}
-.mau-btn:hover {{
-    transform: scale(1.05) !important;
-    box-shadow: 0 25px 50px rgba(255,77,109,0.7) !important;
+
+/* SEMBUNYIKAN TOMBOL ASLI STREAMLIT (Kotak Kosong) */
+div[data-testid="stButton"]:has(button[key="mau_hidden"]) {{
+    display: none !important;
 }}
-.mau-btn:active {{
-    transform: scale(0.98) !important;
+#mau-hidden-btn {{
+    display: none !important;
 }}
-.mau-btn span {{
-    font-size: {st.session_state.size_val}px !important;
-    font-weight: bold !important;
-    line-height: 1.1 !important;
-    white-space: nowrap !important;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.3) !important;
-}}
-.gamau-btn {{
-    background: linear-gradient(45deg, #3d3d3d, #555) !important;
-    color: white !important;
-    font-size: 18px !important;
-    width: 260px !important;
-    height: 60px !important;
-    border-radius: 20px !important;
-    border: none !important;
-    margin: 25px auto !important;
-    font-weight: bold !important;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.3) !important;
-}}
+
+/* Gambar Container */
 .gif-container {{
     max-width: 600px; margin: 20px auto; border-radius: 25px; overflow: hidden;
     box-shadow: 0 25px 60px rgba(0,0,0,0.6);
@@ -74,11 +53,6 @@ st.markdown(f"""
 """, unsafe_allow_html=True)
 
 st.title("💕 Hai dek Tata sayang ku! 💕")
-
-# CHECK MAU CLICK TRIGGER (NO QUERY PARAMS!)
-if st.session_state.mau_click_trigger:
-    st.session_state.show_pic = True
-    st.session_state.mau_click_trigger = False  # Reset trigger
 
 if st.session_state.show_pic:
     st.balloons()
@@ -94,40 +68,46 @@ if st.session_state.show_pic:
     st.snow()
     st.success("💖 Aku sayang banget sama kamu Tata ❤️")
     
-    col1, col2, col3 = st.columns([1,2,1])
-    with col2:
-        if st.button("🎈 Main Lagi? 🎈", use_container_width=True):
-            for key in list(st.session_state.keys()):
-                del st.session_state[key]
-            st.rerun()
+    if st.button("🎈 Main Lagi? 🎈", use_container_width=True):
+        for key in list(st.session_state.keys()):
+            del st.session_state[key]
+        st.rerun()
             
 else:
     st.markdown("### Kamu mau gak rayain Valentine sama aku? 😍🌹🍫")
     
-    # ✅ JS + HIDDEN BUTTON HYBRID - FULLY CLICKABLE!
-    st.markdown("""
-    <div id="mau-container">
-        <button class="mau-btn" onclick="document.getElementById('mau-hidden').click();">
-            <span>MAU DONG! 😍💖</span>
-        </button>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    # HIDDEN STREAMLIT BUTTON - HANDLE LOGIC
-    if st.button(" ", key="mau_hidden", help="Klik tombol pink di atas!"):
-        st.session_state.mau_click_trigger = True
+    # ✅ TOMBOL MAU RAKSASA (Satu-satunya yang terlihat)
+    # Kita gunakan st.button dengan CSS khusus agar tidak ada kotak kosong
+    if st.button("MAU DONG! 😍💖", key="mau_btn", use_container_width=True):
+        st.session_state.show_pic = True
         st.rerun()
     
-    # Gamau button
-    if st.button("**Gamau malas ahh** 🤬😠", key="gak_btn"):
+    # CSS Tambahan untuk memaksa tombol dengan key "mau_btn" jadi RAKSASA
+    st.markdown(f"""
+        <style>
+        div[data-testid="stButton"]:has(button[key="mau_btn"]) button {{
+            font-size: {st.session_state.size_val}px !important;
+            height: {max(80, st.session_state.size_val * 3.2)}px !important;
+            width: {min(100, 40 + st.session_state.reject_count * 12)}% !important;
+            background: linear-gradient(45deg, #ff4d6d, #ff6b9d) !important;
+            color: white !important;
+            font-weight: bold !important;
+            border-radius: 25px !important;
+            box-shadow: 0 15px 35px rgba(255,77,109,0.5) !important;
+        }}
+        </style>
+    """, unsafe_allow_html=True)
+    
+    # Tombol Gamau (Tetap kecil)
+    if st.button("**Gamau malas ahh** 🤬😠", key="gak_btn", use_container_width=True):
         st.session_state.reject_count += 1
-        st.session_state.size_val += 15
+        st.session_state.size_val += 20  # Gua naikin biar pertumbuhannya lebih gila
         messages = [
-            f"😱 ({st.session_state.reject_count}x) Tombol MAU RAKSASA!",
+            f"😱 Tombol MAU makin RAKSASA!",
             "💔 Iyain dong sayangg ❤️",
-            f"Size {st.session_state.size_val}px! Nutup layar nih! 😱",
-            "✨ Klik MAU yuk Tata!",
-            f"Reject #{st.session_state.reject_count} - GEDE BANGET!"
+            f"Tega banget nolak {st.session_state.reject_count}x... 🙏",
+            "✨ Ayo klik MAU Tata!",
+            "Nanti tombolnya nutupin seluruh layar loh! 😱"
         ]
         st.session_state.msg_val = random.choice(messages)
         st.rerun()
