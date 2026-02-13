@@ -9,42 +9,65 @@ if 'msg_val' not in st.session_state: st.session_state.msg_val = ""
 if 'show_pic' not in st.session_state: st.session_state.show_pic = False
 if 'reject_count' not in st.session_state: st.session_state.reject_count = 0
 
-# 2. CSS PERFECT - Menghilangkan "Kotak Kosong" dan Mengatur Ukuran Dinamis
+# 2. CSS MASTER - SATU CSS UNTUK SEMUA (Spesifik banget!)
 st.markdown(f"""
 <style>
-/* Background & Dasar */
+/* Background */
 .stApp {{ 
     background: linear-gradient(135deg, #0e1117 0%, #1a1f2e 50%, #16213e 100%);
+    min-height: 100vh;
 }}
 
-/* Tombol MAU Raksasa: Melebar & Memanjang */
-.mau-btn {{
+/* MARKER untuk target tombol MAU */
+.mau-marker + div [data-testid="stButton"][key="mau_btn_1"] button,
+div[data-testid="stButton"][key="mau_btn_1"] button {{
     font-size: {st.session_state.size_val}px !important;
     height: {max(80, st.session_state.size_val * 3.2)}px !important;
-    width: {min(95, 40 + st.session_state.reject_count * 10)}vw !important;
+    width: {min(98, 40 + st.session_state.reject_count * 12)}vw !important;
     background: linear-gradient(45deg, #ff4d6d, #ff6b9d) !important;
     color: white !important;
     font-weight: bold !important;
-    border-radius: 25px !important;
-    box-shadow: 0 15px 35px rgba(255,77,109,0.5) !important;
-    cursor: pointer !important;
     border: none !important;
-    display: block !important;
-    margin: 20px auto !important;
+    border-radius: 25px !important;
+    box-shadow: 0 20px 40px rgba(255,77,109,0.6) !important;
+    padding: {max(20, st.session_state.size_val * 0.8)}px !important;
     line-height: 1.1 !important;
-    text-align: center !important;
-    transition: all 0.3s ease-in-out !important;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) !important;
+    margin: 15px auto !important;
+    display: block !important;
+    position: relative !important;
+    z-index: 999 !important;
+    overflow: hidden !important;
 }}
 
-/* SEMBUNYIKAN TOMBOL ASLI STREAMLIT (Kotak Kosong) */
-div[data-testid="stButton"]:has(button[key="mau_hidden"]) {{
-    display: none !important;
-}}
-#mau-hidden-btn {{
-    display: none !important;
+/* TEXT di dalam tombol MAU */
+.mau-marker + div [data-testid="stButton"][key="mau_btn_1"] button > div > div,
+.mau-marker + div [data-testid="stButton"][key="mau_btn_1"] button > div > p {{
+    font-size: {st.session_state.size_val}px !important;
+    font-weight: bold !important;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3) !important;
 }}
 
-/* Gambar Container */
+/* Hover effect */
+.mau-marker + div [data-testid="stButton"][key="mau_btn_1"] button:hover {{
+    transform: scale(1.05) !important;
+    box-shadow: 0 30px 60px rgba(255,77,109,0.8) !important;
+}}
+
+/* Gamau button - tetap kecil */
+div[data-testid="stButton"][key="gak_btn_1"] button {{
+    background: linear-gradient(45deg, #3d3d3d, #555) !important;
+    color: white !important;
+    font-size: 18px !important;
+    width: 280px !important;
+    height: 60px !important;
+    border-radius: 20px !important;
+    margin: 20px auto !important;
+    font-weight: bold !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4) !important;
+}}
+
+/* GIF Container */
 .gif-container {{
     max-width: 600px; margin: 20px auto; border-radius: 25px; overflow: hidden;
     box-shadow: 0 25px 60px rgba(0,0,0,0.6);
@@ -76,38 +99,23 @@ if st.session_state.show_pic:
 else:
     st.markdown("### Kamu mau gak rayain Valentine sama aku? 😍🌹🍫")
     
-    # ✅ TOMBOL MAU RAKSASA (Satu-satunya yang terlihat)
-    # Kita gunakan st.button dengan CSS khusus agar tidak ada kotak kosong
-    if st.button("MAU DONG! 😍💖", key="mau_btn", use_container_width=True):
+    # ✅ MARKER + TOMBOL MAU RAKSASA (UNIQUE KEY!)
+    st.markdown('<div class="mau-marker" style="display:none;"></div>', unsafe_allow_html=True)
+    
+    if st.button("**MAU DONG!** 😍💖", key="mau_btn_1", use_container_width=True):
         st.session_state.show_pic = True
         st.rerun()
     
-    # CSS Tambahan untuk memaksa tombol dengan key "mau_btn" jadi RAKSASA
-    st.markdown(f"""
-        <style>
-        div[data-testid="stButton"]:has(button[key="mau_btn"]) button {{
-            font-size: {st.session_state.size_val}px !important;
-            height: {max(80, st.session_state.size_val * 3.2)}px !important;
-            width: {min(100, 40 + st.session_state.reject_count * 12)}% !important;
-            background: linear-gradient(45deg, #ff4d6d, #ff6b9d) !important;
-            color: white !important;
-            font-weight: bold !important;
-            border-radius: 25px !important;
-            box-shadow: 0 15px 35px rgba(255,77,109,0.5) !important;
-        }}
-        </style>
-    """, unsafe_allow_html=True)
-    
-    # Tombol Gamau (Tetap kecil)
-    if st.button("**Gamau malas ahh** 🤬😠", key="gak_btn", use_container_width=True):
+    # Tombol Gamau (UNIQUE KEY!)
+    if st.button("**Gamau malas ahh** 🤬😠", key="gak_btn_1", use_container_width=True):
         st.session_state.reject_count += 1
-        st.session_state.size_val += 20  # Gua naikin biar pertumbuhannya lebih gila
+        st.session_state.size_val += 20  # Naik gila-gilaan!
         messages = [
-            f"😱 Tombol MAU makin RAKSASA!",
+            f"😱 ({st.session_state.reject_count}x) Tombol MAU RAKSASA!",
             "💔 Iyain dong sayangg ❤️",
-            f"Tega banget nolak {st.session_state.reject_count}x... 🙏",
+            f"Size {st.session_state.size_val}px! Nutup layar nih! 😱",
             "✨ Ayo klik MAU Tata!",
-            "Nanti tombolnya nutupin seluruh layar loh! 😱"
+            f"Reject #{st.session_state.reject_count} - GEDE BANGET!"
         ]
         st.session_state.msg_val = random.choice(messages)
         st.rerun()
