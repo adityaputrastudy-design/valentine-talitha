@@ -60,13 +60,23 @@ with col2:
         st.session_state.button_padding += 5
         
         messages = [
-            "Ayo dong, jangan gitu! 🥺", "Yakin banget nih? 💔", "Tega banget sih... 🙏",
-            "Klik yang 'MAU!' aja ya! ✨", "Gak ada tombol 'Gak Mau' hari ini 😜",
-            "Aku begadang loh buat ini... ☕", "Jari kamu kepeleset ya? ⬅️",
-            "Tombol ini rusak, klik yang kiri! 🛠️", "Error: Jawaban tidak ditemukan 🚫",
-            "Hatiku retak dikit nih... 🔨", "Masa cowok sekeren aku ditolak? 😎",
-            "Nanti aku nangis di pojokan... 😭", "Pokoknya harus klik MAU! 😤",
-            "Kalo klik ini lagi, tombol makin gede! 🎈", "Ciee yang ragu-ragu... ❤️"
+            "Ayo dong, jangan gitu! 🥺",
+            "Yakin banget nih? Gak nyesel? 💔",
+            "Tega banget sih sama pejuang subuh... 🙏",
+            "Klik yang 'MAU!' aja ya, jangan yang ini! ✨",
+            "Gak ada tombol 'Gak Mau' di kamus kita hari ini 😜",
+            "Aku udah begadang loh buat bikin ini... ☕",
+            "Jari kamu pasti kepeleset ya? Coba klik yang kiri ⬅️",
+            "Yah, tombol ini lagi rusak, coba klik yang 'MAU!' 🛠️",
+            "Error 404: Jawaban 'Gak Mau' tidak ditemukan 🚫",
+            "Duh, hatiku retak dikit nih pas kamu klik ini... 🔨",
+            "Pikirkan lagi, masa cowok sekeren aku ditolak? 😎",
+            "Nanti aku nangis di pojokan loh... 😭",
+            "Kamu cuma ngetes kesabaran aku kan? 😇",
+            "Gak mau tau, pokoknya harus klik yang 'MAU!' 😤",
+            "Plis... satu kali ini aja klik yang kiri 🙏",
+            "Kalo kamu klik ini lagi, nanti aku kirim spam balon! 🎈",
+            "Ciee yang ragu-ragu... klik 'MAU!' aja udah! 🌹"
         ]
         st.error(random.choice(messages))
     st.markdown('</div>', unsafe_allow_html=True)
