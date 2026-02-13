@@ -49,8 +49,8 @@ with col2:
             "Coba pikir lagi... 🥺", 
             "Yakin banget nih? 💔", 
             "Tega banget sih... 🙏",
-            "Klik yang kiri aja ya! ✨"
+            "Klik yang MAU aja ya! ✨"
         ]
         st.error(random.choice(messages))
 
-st.markdown("<p style='text-align: center; font-size: 0.8em; color: #555;'>Dibuat dengan begadang oleh Aditya</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; font-size: 0.8em; color: #555;'>Dibuat sama Aditya</p>", unsafe_allow_html=True)
