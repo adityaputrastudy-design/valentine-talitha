@@ -9,7 +9,7 @@ if 'msg_val' not in st.session_state: st.session_state.msg_val = ""
 if 'show_pic' not in st.session_state: st.session_state.show_pic = False
 if 'reject_count' not in st.session_state: st.session_state.reject_count = 0
 
-# CSS PERFECT - Text fit inside button
+# CSS PERFECT
 st.markdown(f"""
 <style>
 .stApp {{ 
@@ -36,6 +36,7 @@ st.markdown(f"""
     overflow: hidden !important;
     text-align: center !important;
     position: relative !important;
+    z-index: 999 !important;
 }}
 .mau-btn:hover {{
     transform: scale(1.05) !important;
@@ -49,14 +50,15 @@ st.markdown(f"""
     text-shadow: 0 2px 4px rgba(0,0,0,0.3) !important;
 }}
 .gamau-btn {{
-    background: #3d3d3d !important;
+    background: linear-gradient(45deg, #3d3d3d, #555) !important;
     color: white !important;
     font-size: 16px !important;
-    width: 220px !important;
-    height: 50px !important;
+    width: 240px !important;
+    height: 55px !important;
     border-radius: 15px !important;
     border: none !important;
-    margin: 15px auto !important;
+    margin: 20px auto !important;
+    font-weight: bold !important;
 }}
 .gif-container {{
     max-width: 600px; margin: 20px auto; border-radius: 25px; overflow: hidden;
@@ -89,14 +91,24 @@ if st.session_state.show_pic:
 else:
     st.markdown("### Kamu mau gak rayain Valentine sama aku? 😍🌹🍫")
     
-    # ✅ BUTTON PERFECT - TEXT SELALU FIT!
-    st.markdown(f"""
-    <button class="mau-btn" onclick="parent.location.reload(); window.parent.postMessage({{type:'show_pic'}}, '*');">
-        <span>MAU DONG! 😍💖</span>
-    </button>
-    """, unsafe_allow_html=True)
+    # ✅ HYBRID BUTTON - HTML + Streamlit CLICK DETECTION!
+    col1, col2, col3 = st.columns([2, 1, 2])
+    with col2:
+        # HTML BUTTON BESAR (tampilan only)
+        st.markdown(f"""
+        <div style="pointer-events: none;">
+            <button class="mau-btn">
+                <span>🚫 MAU DONG! 😍💖 (Klik di bawah)</span>
+            </button>
+        </div>
+        """, unsafe_allow_html=True)
     
-    # Gamau Streamlit button
+    # ✅ STREAMLIT BUTTON TRANSPARENT (logic handler)
+    if st.button(" ", key="mau_hidden"):  # Tombol kosong tapi besar
+        st.session_state.show_pic = True
+        st.rerun()
+    
+    # Gamau button
     if st.button("**Gamau malas ahh** 🤬😠", key="gak_btn"):
         st.session_state.reject_count += 1
         st.session_state.size_val += 15
