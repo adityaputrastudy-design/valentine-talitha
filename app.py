@@ -9,13 +9,13 @@ if 'msg_val' not in st.session_state: st.session_state.msg_val = ""
 if 'show_pic' not in st.session_state: st.session_state.show_pic = False
 if 'reject_count' not in st.session_state: st.session_state.reject_count = 0
 
-# CSS PERFECT
+# CSS PERFECT - 2 OPSI SAJA
 st.markdown(f"""
 <style>
 .stApp {{ 
     background: linear-gradient(135deg, #0e1117 0%, #1a1f2e 50%, #16213e 100%);
     min-height: 100vh;
-    padding-bottom: 100px;
+    padding-bottom: 120px;
 }}
 .mau-btn {{
     font-size: {st.session_state.size_val}px !important;
@@ -66,7 +66,7 @@ st.markdown(f"""
     background: linear-gradient(45deg, #4f46e5, #7c3aed) !important;
     color: white !important;
     font-size: 16px !important;
-    width: 200px !important;
+    width: 220px !important;
     height: 55px !important;
     border-radius: 25px !important;
     border: none !important;
@@ -83,9 +83,10 @@ st.markdown(f"""
 
 st.title("💕 Hai dek Tata sayang ku! 💕")
 
-# Handle query params
-if st.query_params.get("show_pic"):
+# Handle MAU click via query param
+if st.query_params.get("show_pic") == ["true"]:
     st.session_state.show_pic = True
+    st.query_params.clear()
     st.rerun()
 
 if st.session_state.show_pic:
@@ -105,21 +106,14 @@ if st.session_state.show_pic:
 else:
     st.markdown("### Kamu mau gak rayain Valentine sama aku? 😍🌹🍫")
     
-    # MAU BUTTON VISUAL ( gede + menarik )
+    # ✅ TOMBOL MAU - HTML CLICKABLE (2 OPSI SAJA!)
     st.markdown(f"""
-    <div style="pointer-events: none;">
-        <button class="mau-btn">
-            <span>MAU DONG! 😍💖 ({st.session_state.size_val}px)</span>
-        </button>
-    </div>
+    <button class="mau-btn" onclick="window.location.href='?show_pic=true'">
+        <span>MAU DONG! 😍💖 ({st.session_state.size_val}px)</span>
+    </button>
     """, unsafe_allow_html=True)
     
-    # MAU BUTTON FUNCTIONAL (hidden tapi clickable)
-    if st.button(" ", key="mau_click", help="Klik area pink di atas!"):
-        st.session_state.show_pic = True
-        st.rerun()
-    
-    # GAMAU BUTTON - SELALU AKTIF
+    # ✅ TOMBOL GAMAU - MEMBESARKAN MAU
     if st.button("**Gamau malas ahh** 😤", key="gak_btn"):
         st.session_state.reject_count += 1
         st.session_state.size_val += 20
@@ -127,13 +121,13 @@ else:
             f"😱 ({st.session_state.reject_count}x) Tombol MAU RAKSASA!",
             "💔 Iyain dong sayangg ❤️",
             f"Size {st.session_state.size_val}px - nutup layar nih!",
-            "✨ Klik tombol pink gede di atas!",
-            f"Reject #{st.session_state.reject_count} - GEDE BANGET!"
+            f"✨ Tombol MAU udah {st.session_state.reject_count}x lebih besar!",
+            f"🚨 Reject #{st.session_state.reject_count} - GEDE BANGET!"
         ]
         st.session_state.msg_val = random.choice(messages)
         st.rerun()
     
-    # RESET BUTTON - SELALU DI BAWAH
+    # ✅ TOMBOL RESET - DI BAWAH
     if st.button("🔄 Reset", key="reset_btn"):
         st.session_state.size_val = 24
         st.session_state.reject_count = 0
