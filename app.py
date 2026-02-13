@@ -47,13 +47,11 @@ if st.session_state.show_pic:
     st.balloons()
     st.markdown("## Hehe… berarti kamu mau yaa 🤍✨")
 
-    st.markdown("""
-    <div style="max-width:600px;margin:20px auto;border-radius:25px;overflow:hidden;
-                box-shadow:0 25px 60px rgba(0,0,0,0.6);">
-        <img src="https://drive.google.com/uc?export=view&id=1yuyexrWlEGZP6edBVxIhFrq5GqAyjWVd" 
-             style="width:100%; height:auto; display:block;">
-    </div>
-    """, unsafe_allow_html=True)
+    # ✅ FOTO (SUDAH DIPERBAIKI)
+    st.image(
+        "https://drive.google.com/uc?export=download&id=1yuyexrWlEGZP6edBVxIhFrq5GqAyjWVd",
+        use_container_width=True
+    )
 
     st.snow()
     st.success("Aku seneng banget kamu bilang iya. Makasih yaa udah selalu ada 🤍")
@@ -64,7 +62,7 @@ if st.session_state.show_pic:
 else:
     st.markdown("### Jadi… kamu mau nggak nemenin aku ngerayain Valentine bareng? 🥺🌹")
 
-    # Styling tombol MAU dinamis (hanya tombol ini yang grow)
+    # Styling tombol MAU dinamis
     st.markdown(f"""
     <style>
     div[data-testid="stButton"] > button[kind="secondary"] {{
