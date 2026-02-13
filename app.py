@@ -1,14 +1,20 @@
 import streamlit as st
 import random
-import os
 
-st.set_page_config(page_title="Special Message", page_icon="💌")
+# Konfigurasi halaman
+st.set_page_config(page_title="Special for Talitha", page_icon="💌")
 
-# CSS untuk Dark Mode
+# CSS untuk tampilan Dark Mode yang elegan
 st.markdown("""
     <style>
-    .stApp { background-color: #0e1117; }
-    h1, h2, h3, p, span, label { color: #ffffff !important; }
+    .stApp {
+        background-color: #0e1117;
+    }
+    h1, h3, p {
+        color: #ffffff !important;
+        text-align: center;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
     .stButton>button {
         width: 100%;
         border-radius: 20px;
@@ -16,6 +22,7 @@ st.markdown("""
         background-color: #ff4d6d;
         color: white !important;
         font-weight: bold;
+        border: none;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -23,29 +30,27 @@ st.markdown("""
 st.title("Hai Talitha! ❤️")
 st.markdown("### Kamu mau jadi Valentine aku gak? 🌹🍫")
 
-# PERBAIKAN: Gunakan nama file saja, jangan path C:\Users\...
-gif_path = "valentine.gif"
+# Link Direct dari Google Drive lo
+gif_url = "https://drive.google.com/uc?export=view&id=1yuyexrWlEGZP6edBVxIhFrq5GqAyjWVd"
 
 col1, col2 = st.columns(2)
 
 with col1:
-    if st.button("MAU!"):
+    if st.button("MAU! 😍"):
         st.balloons()
-        st.success("Yeay! Sampai ketemu nanti! 🍫🌹")
-        
-        # Cek apakah file ada di folder GitHub
-        if os.path.exists(gif_path):
-            st.image(gif_path, caption="Happy Valentine's Day! ✨", use_container_width=True)
-        else:
-            st.error("File valentine.gif belum terdeteksi di GitHub!")
+        st.success("Yeay! Happy Valentine's Day, Talitha! 🍫🌹")
+        # Menampilkan GIF dari link Google Drive
+        st.image(gif_url, caption="Happy Valentine's Day! ✨", use_container_width=True)
+        st.snow()
 
 with col2:
-    if st.button("Gak Mau"):
+    if st.button("Gak Mau 😜"):
         messages = [
-            "Ayo dong, jangan gitu! 🥺", 
-            "Yakin banget nih?", 
-            "Coba pikir lagi...", 
-            "Tega banget sih...",
-            "Klik yang 'MAU!' aja ya!"
+            "Coba pikir lagi... 🥺", 
+            "Yakin banget nih? 💔", 
+            "Tega banget sih... 🙏",
+            "Klik yang kiri aja ya! ✨"
         ]
         st.error(random.choice(messages))
+
+st.markdown("<p style='text-align: center; font-size: 0.8em; color: #555;'>Dibuat dengan begadang oleh Aditya</p>", unsafe_allow_html=True)
