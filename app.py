@@ -38,14 +38,14 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-st.title("💕 Hai dek Tata sayang ku! 💕")
+st.title("💌 Hai Tataaa 🤍")
 
 # =========================
 # AFTER CLICK MAU
 # =========================
 if st.session_state.show_pic:
     st.balloons()
-    st.markdown("## 🎉 Yeay! Happy Valentine's Day Tata sayang! 🍫🌹✨")
+    st.markdown("## Hehe… berarti kamu mau yaa 🤍✨")
 
     st.markdown("""
     <div style="max-width:600px;margin:20px auto;border-radius:25px;overflow:hidden;
@@ -56,15 +56,15 @@ if st.session_state.show_pic:
     """, unsafe_allow_html=True)
 
     st.snow()
-    st.success("💖 Aku sayang banget sama kamu Tata ❤️")
+    st.success("Aku seneng banget kamu bilang iya. Makasih yaa udah selalu ada 🤍")
 
 # =========================
 # MAIN QUESTION
 # =========================
 else:
-    st.markdown("### Kamu mau gak rayain Valentine sama aku? 😍🌹🍫")
+    st.markdown("### Jadi… kamu mau nggak nemenin aku ngerayain Valentine bareng? 🥺🌹")
 
-    # Styling tombol MAU dinamis
+    # Styling tombol MAU dinamis (hanya tombol ini yang grow)
     st.markdown(f"""
     <style>
     div[data-testid="stButton"] > button[kind="secondary"] {{
@@ -79,26 +79,27 @@ else:
         box-shadow: 0 15px 35px rgba(255,77,109,0.5) !important;
         margin: 20px auto !important;
         display: block !important;
+        transition: all 0.3s ease-in-out !important;
     }}
     </style>
     """, unsafe_allow_html=True)
 
     # TOMBOL MAU
-    if st.button("MAU DONG! 😍💖"):
+    if st.button("Iya, mau 🤍"):
         st.session_state.show_pic = True
         st.rerun()
 
     # TOMBOL GAMAU
-    if st.button("Gamau malas ahh 😤"):
+    if st.button("Hmm… nggak dulu deh 😅"):
         st.session_state.reject_count += 1
         st.session_state.size_val += 20
 
         messages = [
-            f"😱 ({st.session_state.reject_count}x) Tombol MAU makin RAKSASA!",
-            "💔 Iyain dong sayangg ❤️",
-            f"Size sekarang {st.session_state.size_val}px 😳",
-            f"✨ Udah ditolak {st.session_state.reject_count}x nih!",
-            "🚨 Tombolnya hampir nutup layar!"
+            f"Hmm… udah nolak {st.session_state.reject_count} kali loh 😤",
+            "Ih masa nggak sih… coba pikir lagi deh 🥺",
+            f"Tombolnya makin gede nih… seriusan nggak mau? 😏",
+            "Aku tunggu jawaban yang bener yaa 😌",
+            "Yakin banget nih nggak mau? Aku sabar kok… tapi tombolnya nggak 😆"
         ]
 
         st.session_state.msg_val = random.choice(messages)
@@ -109,7 +110,7 @@ else:
 # ERROR MESSAGE
 # =========================
 if st.session_state.msg_val:
-    st.error("💥 " + st.session_state.msg_val)
+    st.error("💬 " + st.session_state.msg_val)
 
 
 # =========================
@@ -117,7 +118,7 @@ if st.session_state.msg_val:
 # =========================
 st.markdown("""
 <div class="footer">
-    <p style='font-size:1.2em;margin:0;color:#ff6b9d;'>Made with ❤️ by Aditya</p>
-    <p style='font-size:0.95em;'>Happy Valentine's Day 2026! 💕</p>
+    <p style='font-size:1.1em;margin:0;color:#ff6b9d;'>Dibuat khusus buat kamu 🤍</p>
+    <p style='font-size:0.9em;'>— Adit</p>
 </div>
 """, unsafe_allow_html=True)
