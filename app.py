@@ -46,11 +46,24 @@ with col1:
 with col2:
     if st.button("Gak Mau 😜"):
         messages = [
-            "Coba pikir lagi... 🥺", 
-            "Yakin banget nih? 💔", 
-            "Tega banget sih... 🙏",
-            "Klik yang MAU aja ya! ✨"
+           "Ayo dong, jangan gitu! 🥺",
+            "Yakin banget nih? Gak nyesel? 💔",
+            "Tega banget sih sama pejuang subuh... 🙏",
+            "Klik yang 'MAU!' aja ya, jangan yang ini! ✨",
+            "Gak ada tombol 'Gak Mau' di kamus kita hari ini 😜",
+            "Aku udah begadang loh buat bikin ini... ☕",
+            "Jari kamu pasti kepeleset ya? Coba klik yang kiri ⬅️",
+            "Yah, tombol ini lagi rusak, coba klik yang 'MAU!' 🛠️",
+            "Error 404: Jawaban 'Gak Mau' tidak ditemukan 🚫",
+            "Duh, hatiku retak dikit nih pas kamu klik ini... 🔨",
+            "Pikirkan lagi, masa cowok sekeren aku ditolak? 😎",
+            "Nanti aku nangis di pojokan loh... 😭",
+            "Kamu cuma ngetes kesabaran aku kan? 😇",
+            "Gak mau tau, pokoknya harus klik yang 'MAU!' 😤",
+            "Plis... satu kali ini aja klik yang kiri 🙏",
+            "Kalo kamu klik ini lagi, nanti aku kirim spam balon! 🎈",
+            "Ciee yang ragu-ragu... klik 'MAU!' aja udah! 🌹"
         ]
         st.error(random.choice(messages))
 
-st.markdown("<p style='text-align: center; font-size: 0.8em; color: #555;'>Dibuat sama Aditya</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; font-size: 0.8em; color: #555;'>Dibuat sama Adit <3</p>", unsafe_allow_html=True)
