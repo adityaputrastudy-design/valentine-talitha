@@ -1,16 +1,17 @@
 import streamlit as st
 import random
+import time
 
 st.set_page_config(page_title="Special for Tata", page_icon="💌", layout="centered")
 
-# Session state
+# Session state lengkap
 if 'size_val' not in st.session_state: st.session_state.size_val = 24
 if 'msg_val' not in st.session_state: st.session_state.msg_val = ""
 if 'show_pic' not in st.session_state: st.session_state.show_pic = False
 if 'reject_count' not in st.session_state: st.session_state.reject_count = 0
-if 'mau_clicked' not in st.session_state: st.session_state.mau_clicked = False
+if 'mau_click_trigger' not in st.session_state: st.session_state.mau_click_trigger = False
 
-# CSS + JS STATE MANAGER
+# CSS PERFECT - Dynamic sizing
 st.markdown(f"""
 <style>
 .stApp {{ 
@@ -70,31 +71,14 @@ st.markdown(f"""
     box-shadow: 0 25px 60px rgba(0,0,0,0.6);
 }}
 </style>
-
-<script>
-if (!window.mauClicked) {{
-    window.mauClicked = false;
-}}
-document.addEventListener('click', function(e) {{
-    if (e.target.closest('.mau-btn')) {{
-        window.mauClicked = true;
-        // Trigger Streamlit rerun via URL hash
-        window.location.hash = 'mau-clicked';
-        setTimeout(() => window.parent.location.reload(), 100);
-    }}
-}});
-if (window.location.hash === '#mau-clicked') {{
-    window.mauClicked = true;
-}}
-</script>
 """, unsafe_allow_html=True)
 
 st.title("💕 Hai dek Tata sayang ku! 💕")
 
-# ✅ DETECT MAU CLICK via query param
-if st.experimental_get_query_params().get("mau") == ["1"] or st.session_state.mau_clicked:
+# CHECK MAU CLICK TRIGGER (NO QUERY PARAMS!)
+if st.session_state.mau_click_trigger:
     st.session_state.show_pic = True
-    st.session_state.mau_clicked = True
+    st.session_state.mau_click_trigger = False  # Reset trigger
 
 if st.session_state.show_pic:
     st.balloons()
@@ -110,21 +94,29 @@ if st.session_state.show_pic:
     st.snow()
     st.success("💖 Aku sayang banget sama kamu Tata ❤️")
     
-    if st.button("🎈 Main Lagi? 🎈", key="reset"):
-        for key in list(st.session_state.keys()):
-            del st.session_state[key]
-        st.experimental_set_query_params()
-        st.rerun()
-        
+    col1, col2, col3 = st.columns([1,2,1])
+    with col2:
+        if st.button("🎈 Main Lagi? 🎈", use_container_width=True):
+            for key in list(st.session_state.keys()):
+                del st.session_state[key]
+            st.rerun()
+            
 else:
     st.markdown("### Kamu mau gak rayain Valentine sama aku? 😍🌹🍫")
     
-    # ✅ SATU TOMBOL MAU - FULLY CLICKABLE!
+    # ✅ JS + HIDDEN BUTTON HYBRID - FULLY CLICKABLE!
     st.markdown("""
-    <button class="mau-btn">
-        <span>MAU DONG! 😍💖</span>
-    </button>
+    <div id="mau-container">
+        <button class="mau-btn" onclick="document.getElementById('mau-hidden').click();">
+            <span>MAU DONG! 😍💖</span>
+        </button>
+    </div>
     """, unsafe_allow_html=True)
+    
+    # HIDDEN STREAMLIT BUTTON - HANDLE LOGIC
+    if st.button(" ", key="mau_hidden", help="Klik tombol pink di atas!"):
+        st.session_state.mau_click_trigger = True
+        st.rerun()
     
     # Gamau button
     if st.button("**Gamau malas ahh** 🤬😠", key="gak_btn"):
