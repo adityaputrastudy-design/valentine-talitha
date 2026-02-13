@@ -20,7 +20,7 @@ if 'reject_count' not in st.session_state:
 
 
 # =========================
-# GLOBAL BACKGROUND STYLE
+# GLOBAL STYLE
 # =========================
 st.markdown("""
 <style>
@@ -64,10 +64,10 @@ if st.session_state.show_pic:
 else:
     st.markdown("### Kamu mau gak rayain Valentine sama aku? 😍🌹🍫")
 
-    # Styling tombol MAU secara dinamis
+    # Styling tombol MAU dinamis
     st.markdown(f"""
     <style>
-    div[data-testid="stButton"] > button#maubtn {{
+    div[data-testid="stButton"] > button[kind="secondary"] {{
         font-size: {st.session_state.size_val}px !important;
         height: {max(80, st.session_state.size_val * 3.2)}px !important;
         width: {min(98, 40 + st.session_state.reject_count * 12)}vw !important;
@@ -83,17 +83,13 @@ else:
     </style>
     """, unsafe_allow_html=True)
 
-    # =========================
-    # TOMBOL MAU (FIXED)
-    # =========================
-    if st.button("MAU DONG! 😍💖", key="maubtn"):
+    # TOMBOL MAU
+    if st.button("MAU DONG! 😍💖"):
         st.session_state.show_pic = True
         st.rerun()
 
-    # =========================
     # TOMBOL GAMAU
-    # =========================
-    if st.button("Gamau malas ahh 😤", key="gak_btn"):
+    if st.button("Gamau malas ahh 😤"):
         st.session_state.reject_count += 1
         st.session_state.size_val += 20
 
@@ -106,15 +102,6 @@ else:
         ]
 
         st.session_state.msg_val = random.choice(messages)
-        st.rerun()
-
-    # =========================
-    # RESET
-    # =========================
-    if st.button("🔄 Reset", key="reset_btn"):
-        st.session_state.size_val = 24
-        st.session_state.reject_count = 0
-        st.session_state.msg_val = ""
         st.rerun()
 
 
