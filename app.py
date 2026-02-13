@@ -52,7 +52,7 @@ with c1:
         st.snow()
 
 with c2:
-    if st.button("Gamau malas ahh 🥹"):
+    if st.button("Gamau malas ahh 🤬😠"):
         st.session_state.size_val += 45  # Gua naikin biar pertumbuhannya gila
         
         # Message Natural ala lo
