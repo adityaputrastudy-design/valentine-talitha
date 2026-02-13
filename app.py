@@ -3,39 +3,43 @@ import random
 
 st.set_page_config(page_title="Special for Talitha", page_icon="💌", layout="centered")
 
-# 1. Inisialisasi state untuk ukuran dan rasio kolom
+# 1. State Management yang presisi
 if 'font_size' not in st.session_state:
     st.session_state.font_size = 18
-if 'col_ratio' not in st.session_state:
-    st.session_state.col_ratio = 1.0  # Rasio awal seimbang
+if 'width_percent' not in st.session_state:
+    st.session_state.width_percent = 45 # Lebar awal tombol MAU (dalam %)
 if 'last_msg' not in st.session_state:
     st.session_state.last_msg = ""
 
-# 2. CSS Dinamis: Mengatur tinggi tombol dan ukuran teks secara proporsional
+# 2. CSS Master: Fokus pada ekspansi horizontal & vertikal
 st.markdown(f"""
     <style>
-    .stApp {{ background-color: #0e1117; overflow: hidden; }}
+    .stApp {{ background-color: #0e1117; overflow-x: hidden; }}
     h1, h3, p {{ color: #ffffff !important; text-align: center; }}
     
-    /* Style Tombol MAU: Melebar & Memanjang otomatis mengikuti kolom */
+    /* Container untuk menjaga kedua tombol tetap satu baris sejauh mungkin */
+    div[data-testid="stHorizontalBlock"] {{
+        align-items: center !important;
+    }}
+
+    /* Tombol MAU: Melebar ke samping & Manjang ke bawah secara brutal */
     div[data-testid="stHorizontalBlock"] > div:nth-child(1) button {{
         font-size: {st.session_state.font_size}px !important;
-        height: {max(60, st.session_state.font_size * 2)}px !important;
+        width: 100% !important;
+        height: {max(60, st.session_state.font_size * 2.2)}px !important;
         background-color: #ff4d6d !important;
         color: white !important;
         border-radius: 20px;
-        width: 100% !important;
         font-weight: bold;
-        border: none;
-        transition: 0.3s ease;
+        transition: 0.2s;
     }}
     
-    /* Style Tombol Gak Mau: Tetap kecil di areanya */
+    /* Tombol Gak Mau: Stay in place tapi makin terhimpit */
     div[data-testid="stHorizontalBlock"] > div:nth-child(2) button {{
         background-color: #3d3d3d !important;
         color: #ffffff !important;
-        border-radius: 20px;
         font-size: 14px !important;
+        height: 50px !important;
     }}
     </style>
     """, unsafe_allow_html=True)
@@ -45,8 +49,10 @@ st.markdown("### Kamu mau jadi Valentine aku gak? 🌹🍫")
 
 gif_url = "https://drive.google.com/uc?export=view&id=1yuyexrWlEGZP6edBVxIhFrq5GqAyjWVd"
 
-# 3. Layout Kolom Dinamis: col1 akan semakin lebar menjepit col2
-col1, col2 = st.columns([st.session_state.col_ratio, 1])
+# 3. Layout: Gunakan rasio yang berubah drastis
+# Col1 akan membesar dari 1 bagian sampai 20 bagian dibanding Col2
+col_ratio = st.session_state.width_percent / 10
+col1, col2 = st.columns([col_ratio, 1])
 
 with col1:
     if st.button("MAU! 😍"):
@@ -56,20 +62,18 @@ with col1:
         st.snow()
 
 with col2:
-    # Tombol Gak Mau akan hilang jika sudah terjepit habis
-    if st.session_state.col_ratio < 10:
+    # Tombol Gak Mau cuma bisa diklik kalo tombol MAU belum menutupi seluruh layar
+    if st.session_state.width_percent < 200:
         if st.button("Gak Mau 😜"):
-            # Pertumbuhan agresif ke samping dan teks
-            st.session_state.font_size += 25
-            st.session_state.col_ratio += 2.0  # Menambah lebar kolom ke samping
+            st.session_state.font_size += 25   # Tulisan membesar
+            st.session_state.width_percent += 40 # Melebar ke samping secara agresif
             
-            messages = [
-                "Ayo dong, jangan gitu! 🥺", "Yakin banget nih? 💔", 
-                "Tega banget sih... 🙏", "Klik yang 'MAU!' aja ya! ✨", 
-                "Gak ada tombol 'Gak Mau' hari ini 😜", "Aku begadang loh buat ini... ☕",
+            msgs = [
+                "Gak bisa nolak! 😜", "Yakin banget nih? 💔", "Tega banget sih... 🙏",
+                "Klik yang 'MAU!' aja ya! ✨", "Aku begadang loh... ☕",
                 "Tombol kirinya makin gede, awas ketutup! 🎈"
             ]
-            st.session_state.last_msg = random.choice(messages)
+            st.session_state.last_msg = random.choice(msgs)
             st.rerun()
 
 if st.session_state.last_msg:
