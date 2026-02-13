@@ -8,8 +8,9 @@ if 'size_val' not in st.session_state: st.session_state.size_val = 24
 if 'msg_val' not in st.session_state: st.session_state.msg_val = ""
 if 'show_pic' not in st.session_state: st.session_state.show_pic = False
 if 'reject_count' not in st.session_state: st.session_state.reject_count = 0
+if 'mau_clicked' not in st.session_state: st.session_state.mau_clicked = False
 
-# CSS PERFECT
+# CSS + JS STATE MANAGER
 st.markdown(f"""
 <style>
 .stApp {{ 
@@ -42,6 +43,9 @@ st.markdown(f"""
     transform: scale(1.05) !important;
     box-shadow: 0 25px 50px rgba(255,77,109,0.7) !important;
 }}
+.mau-btn:active {{
+    transform: scale(0.98) !important;
+}}
 .mau-btn span {{
     font-size: {st.session_state.size_val}px !important;
     font-weight: bold !important;
@@ -52,22 +56,45 @@ st.markdown(f"""
 .gamau-btn {{
     background: linear-gradient(45deg, #3d3d3d, #555) !important;
     color: white !important;
-    font-size: 16px !important;
-    width: 240px !important;
-    height: 55px !important;
-    border-radius: 15px !important;
+    font-size: 18px !important;
+    width: 260px !important;
+    height: 60px !important;
+    border-radius: 20px !important;
     border: none !important;
-    margin: 20px auto !important;
+    margin: 25px auto !important;
     font-weight: bold !important;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3) !important;
 }}
 .gif-container {{
     max-width: 600px; margin: 20px auto; border-radius: 25px; overflow: hidden;
     box-shadow: 0 25px 60px rgba(0,0,0,0.6);
 }}
 </style>
+
+<script>
+if (!window.mauClicked) {{
+    window.mauClicked = false;
+}}
+document.addEventListener('click', function(e) {{
+    if (e.target.closest('.mau-btn')) {{
+        window.mauClicked = true;
+        // Trigger Streamlit rerun via URL hash
+        window.location.hash = 'mau-clicked';
+        setTimeout(() => window.parent.location.reload(), 100);
+    }}
+}});
+if (window.location.hash === '#mau-clicked') {{
+    window.mauClicked = true;
+}}
+</script>
 """, unsafe_allow_html=True)
 
 st.title("💕 Hai dek Tata sayang ku! 💕")
+
+# ✅ DETECT MAU CLICK via query param
+if st.experimental_get_query_params().get("mau") == ["1"] or st.session_state.mau_clicked:
+    st.session_state.show_pic = True
+    st.session_state.mau_clicked = True
 
 if st.session_state.show_pic:
     st.balloons()
@@ -86,27 +113,18 @@ if st.session_state.show_pic:
     if st.button("🎈 Main Lagi? 🎈", key="reset"):
         for key in list(st.session_state.keys()):
             del st.session_state[key]
+        st.experimental_set_query_params()
         st.rerun()
         
 else:
     st.markdown("### Kamu mau gak rayain Valentine sama aku? 😍🌹🍫")
     
-    # ✅ HYBRID BUTTON - HTML + Streamlit CLICK DETECTION!
-    col1, col2, col3 = st.columns([2, 1, 2])
-    with col2:
-        # HTML BUTTON BESAR (tampilan only)
-        st.markdown(f"""
-        <div style="pointer-events: none;">
-            <button class="mau-btn">
-                <span>🚫 MAU DONG! 😍💖 (Klik di bawah)</span>
-            </button>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    # ✅ STREAMLIT BUTTON TRANSPARENT (logic handler)
-    if st.button(" ", key="mau_hidden"):  # Tombol kosong tapi besar
-        st.session_state.show_pic = True
-        st.rerun()
+    # ✅ SATU TOMBOL MAU - FULLY CLICKABLE!
+    st.markdown("""
+    <button class="mau-btn">
+        <span>MAU DONG! 😍💖</span>
+    </button>
+    """, unsafe_allow_html=True)
     
     # Gamau button
     if st.button("**Gamau malas ahh** 🤬😠", key="gak_btn"):
