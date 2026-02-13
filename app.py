@@ -47,11 +47,8 @@ if st.session_state.show_pic:
     st.balloons()
     st.markdown("## Hehe… berarti kamu mau yaa 🤍✨")
 
-    # ✅ FOTO (SUDAH DIPERBAIKI)
-    st.image(
-        "https://drive.google.com/uc?export=download&id=1yuyexrWlEGZP6edBVxIhFrq5GqAyjWVd",
-        use_container_width=True
-    )
+    # ✅ GIF DARI REPO GITHUB (FILE LOKAL)
+    st.image("valentine.gif", use_container_width=True)
 
     st.snow()
     st.success("Aku seneng banget kamu bilang iya. Makasih yaa udah selalu ada 🤍")
